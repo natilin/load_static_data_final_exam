@@ -3,6 +3,9 @@ from typing import List
 import pandas as pd
 from pandas import DataFrame, NaT
 from tqdm import tqdm
+
+from app.utils import calculate_death_rate
+
 tqdm.pandas()
 from app.repository.mongoDB_repository import insert_all_data
 from app.service.csv_service import get_merged_csv
@@ -35,6 +38,7 @@ def convert_row_of_terror_df_to_dict(row):
         "terrorists_participating": row["nperps"],
         "killed": row["nkill"],
         "injured": row["nwound"],
+        "deadly_rating": calculate_death_rate(row["nkill"], row["nwound"]),
     }
 
 
