@@ -37,9 +37,9 @@ def load_csv_type_1(csv_path) -> pd.DataFrame:
         "targtype1_txt": str,
         "targsubtype1_txt": str,
         "gname": str,
-        "nperps": int,
-        "nkill": int,
-        "nwound": int
+        "nperps": "float64",
+        "nkill": "float64",
+        "nwound": "float64"
     }
     df = pd.read_csv(csv_path, encoding="iso-8859-1",usecols=cols, dtype=dtype)
     return df
@@ -51,8 +51,8 @@ def load_csv_type_2(csv_path) -> pd.DataFrame:
         "Country": str,
         "Perpetrator": str,
         "Weapon": str,
-        "Injuries": int,
-        "Fatalities": int,
+        "Injuries": "float64",
+        "Fatalities": "float64",
         "Description": str
 
     }
