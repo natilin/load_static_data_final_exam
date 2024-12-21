@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 
 
 def custom_to_datetime(series, fmt, threshold):
@@ -7,9 +8,7 @@ def custom_to_datetime(series, fmt, threshold):
 
 
 def calculate_death_rate(kills, injuries) -> int:
-    if not kills:
-        kills = 0
-    if not injuries:
-        injuries = 0
+    kills = 0 if math.isnan(kills) else kills
+    injuries = 0 if math.isnan(injuries)else injuries
     return (kills * 2) + injuries
 

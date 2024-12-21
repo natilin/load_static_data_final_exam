@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 import pandas as pd
 from toolz import pipe
@@ -18,7 +20,6 @@ def get_normalize_df_type1(df: pd.DataFrame) -> pd.DataFrame:
     df2.loc[df2["nperps"] <= 0, "nperps"] = np.nan
     df2.replace("Unknown", np.nan, inplace=True)
     df2["date"] = pd.to_datetime(df2[['year', 'month', 'day']], errors='coerce')
-
     df2["country_txt"] = df2["country_txt"].replace({"East Germany (GDR)": "Germany", "West Germany (FRG)": "Germany"})
     df_cleaned = df2.drop_duplicates()
     return df_cleaned
@@ -40,6 +41,16 @@ def get_normalize_df_type2(df: pd.DataFrame) -> pd.DataFrame:
     return df_cleaned
 
 
+def get_normalize_merged_df(merged_df):
+    copy_merged_df = merged_df.copy()
+    copy_merged_df["date"] = copy_merged_df["date"].astype(object).where(copy_merged_df["date"].notnull(), None)
+    copy_merged_df["year"] = copy_merged_df.apply(
+        lambda row: row["date"].year if pd.notna(row["date"]) else row["year"], axis=1
+    )
+    copy_merged_df.replace("Unknown", np.nan, inplace=True)
+    return copy_merged_df
+
+
 def get_merged_csv():
     csv1_path = "./db/data/globalterrorismdb_0718dist.csv"
     csv2_path = "./db/data/RAND_Database_of_Worldwide_Terrorism_Incidents.csv"
@@ -53,10 +64,5 @@ def get_merged_csv():
     )
 
 
-    merged_df = pd.merge(df1, df2, how="outer",on=["date", "city", "country_txt", "nkill", "nwound"])
-    merged_df["date"] = df2["date"].astype(object).where(df2["date"].notnull(), None)
-    df2.replace("Unknown", np.nan, inplace=True)
-    return merged_df
-
-
-
+    merged_df =  pd.merge(df1, df2, how="outer",on=["date", "city", "country_txt", "nkill", "nwound"])
+    return get_normalize_merged_df(merged_df)

@@ -45,7 +45,6 @@ def convert_row_of_terror_df_to_dict(row):
 def upload_df_to_mongo():
     df = get_merged_csv()
     data_list = convert_terror_df_to_list(df)
-
     insert_all_data(data_list)
     print("Data inserted successfully")
 
