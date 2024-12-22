@@ -1,7 +1,7 @@
 from typing import List
 
 import pandas as pd
-from pandas import DataFrame, NaT
+from pandas import DataFrame
 from tqdm import tqdm
 
 from app.utils import calculate_death_rate
@@ -46,5 +46,5 @@ def upload_df_to_mongo():
     df = get_merged_csv()
     data_list = convert_terror_df_to_list(df)
     insert_all_data(data_list)
-    print("Data inserted successfully")
+    print("Data inserted successfully to MongoDB")
 
