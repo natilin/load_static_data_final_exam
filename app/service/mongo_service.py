@@ -6,8 +6,8 @@ from tqdm import tqdm
 
 from app.utils import calculate_death_rate
 
-tqdm.pandas()
-from app.repository.mongoDB_repository import insert_all_data
+
+from app.repository.mongoDB_repository import insert_all_data, create_index
 from app.service.csv_service import get_merged_csv
 
 
@@ -15,10 +15,12 @@ from app.service.csv_service import get_merged_csv
 
 
 def convert_terror_df_to_list(df: DataFrame) -> List:
+    tqdm.pandas(desc="Converting data to list")
     return df.progress_apply(convert_row_of_terror_df_to_dict, axis=1).tolist()
 
 def convert_row_of_terror_df_to_dict(row):
     return {
+        "uuid": row["uuid"],
         "year": row["year"],
         "date": row["date"],
         "location":{
@@ -42,9 +44,10 @@ def convert_row_of_terror_df_to_dict(row):
     }
 
 
-def upload_df_to_mongo():
-    df = get_merged_csv()
+def upload_df_to_mongo(df):
     data_list = convert_terror_df_to_list(df)
     insert_all_data(data_list)
     print("Data inserted successfully to MongoDB")
+    create_index()
+    print("Index created successfully in MongoDB")
 

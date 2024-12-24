@@ -1,4 +1,5 @@
 import math
+import uuid
 
 import numpy as np
 import pandas as pd
@@ -48,6 +49,8 @@ def get_normalize_merged_df(merged_df):
         lambda row: row["date"].year if pd.notna(row["date"]) else row["year"], axis=1
     )
     copy_merged_df.replace("Unknown", np.nan, inplace=True)
+    copy_merged_df["uuid"] = pd.Series([str(uuid.uuid4()) for _ in range(len(copy_merged_df))], index=copy_merged_df.index)
+
     return copy_merged_df
 
 
