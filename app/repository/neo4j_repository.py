@@ -12,10 +12,10 @@ def insert_all_data(df: pd.DataFrame):
         MERGE (a:Attack_grope {name: row.gname})
         MERGE (t:Target {target_type: row.targtype1_txt})
         MERGE (c:Country {name: row.country_txt})
-        CREATE (a) - [e1:EVENT {date: row.date}] -> (t)
-        CREATE (a) - [e2:EVENT {date: row.date}] -> (c)
+        CREATE (a) - [e1:EVENT {year: row.year}] -> (t)
+        CREATE (a) - [e2:EVENT {year: row.year}] -> (c)
     """
-    columns_to_check = ["gname", "targtype1_txt", "country_txt", "date"]
+    columns_to_check = ["gname", "targtype1_txt", "country_txt", "year"]
     filtered_df = df.dropna(subset=columns_to_check)
     rows = filtered_df.to_dict(orient="records")
 
